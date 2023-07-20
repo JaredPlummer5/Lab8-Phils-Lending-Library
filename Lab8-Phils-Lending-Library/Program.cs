@@ -7,6 +7,14 @@ class Program
 {
     static void Main(string[] args)
     {
+
+        string libraryName = "Phil's Lending Library";
+        foreach (char c in libraryName)
+        {
+            Console.Write(c);
+            Thread.Sleep(100); // adjust delay here
+        }
+        Console.WriteLine();
         Library library = new Library();
 
         Bag<Book> backPack = new Bag<Book>();
