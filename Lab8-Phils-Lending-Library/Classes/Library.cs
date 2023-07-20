@@ -6,48 +6,49 @@ namespace Lab8_Phils_Lending_Library.Classes
 {
     public class Library : ILibrary
     {
-        private readonly List<Book> Books;
+        private readonly Dictionary<string, Book> _Books;
+      
 
         public Library()
         {
-            Books = new List<Book>();
+            _Books = new Dictionary<string,Book>();
         }
 
-        public int Count => Books.Count;
+        public int Count => _Books.Count;
 
         // Adds a new book to the library
         public void AddBook(string title, string firstName, string lastName, int numberOfPages)
         {
-            Book book = new Book(title, firstName, lastName, numberOfPages, Count);
-            Books.Add(book);
+            Book book = new Book(title, firstName, lastName, numberOfPages);
+            _Books.Add(title,book);
         }
 
         // Borrows a book from the library by title
         public Book Borrow(string title)
         {
             // Find the book in the library
-            Book book = Books.Find(b => b.Title == title);
-            if (book != null)
+            if (_Books.ContainsKey(title))
             {
-                Books.Remove(book); // Remove the book from the library
+                Book book = _Books[title];
+                _Books.Remove(title); // Remove the book from the library
+                return book; // Return the borrowed book
             }
             else
             {
                 Console.WriteLine("You can't borrow that book");
+                return null; // Return null if book not found
             }
-            return book; // Return the borrowed book or null if not found
         }
-
-        // Returns a book to the library
-        public void Return(Book book)
+            // Returns a book to the library
+            public void Return(Book book)
         {
-            Books.Add(book); // Add the returned book to the library
+            _Books.Add(book.Title,book); // Add the returned book to the library
         }
 
         // Gets the enumerator for iterating over the books in the library
         public IEnumerator<Book> GetEnumerator()
         {
-            return Books.GetEnumerator();
+            return _Books.Values.GetEnumerator();
         }
 
         // Gets the non-generic enumerator for iterating over the books in the library
